@@ -2,7 +2,7 @@
 var Gpio = require('onoff').Gpio;
 var blueLight = new Gpio(25, 'out'), whiteLight = new Gpio(21, 'out');
 let blinkInterval = null;
-let speedMap = {1: "1000", 2: "800", 3: "600", 4: "400", 5: "500"};
+let speedMap = {1: "1000", 2: "800", 3: "600", 4: "400", 5: "200"};
 let logger = require("../logger");
 
 function clearBlink() {
