@@ -1,1 +1,0 @@
-node server.js & echo $! >pid.log
