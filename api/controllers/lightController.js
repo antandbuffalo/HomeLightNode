@@ -15,7 +15,7 @@ exports.changeStatus = function(req, res) {
     logger.debug("in function changeStatus start " + JSON.stringify(req.body));
     if(req.body) {
         var newStatus = req.body.status? req.body.status : "off";
-        var speed = req.body? req.body.speed : null;
+        var speed = req.body.speed? req.body.speed : null;
         let isNightMode = req.body.isNightMode? req.body.isNightMode : null;
 
         if(isNightMode !== null) {

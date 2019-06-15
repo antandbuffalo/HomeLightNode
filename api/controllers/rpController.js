@@ -42,6 +42,7 @@ module.exports.changeSpeed = function(speed, status) {
             return {status: "on", speed: sp};
         }
         if(speedMap[sp]) {
+            clearBlink();
             let interval = blink(speedMap[speed]);
             return {status: "on", interval: interval, speed: sp};
         }    
