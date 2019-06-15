@@ -14,22 +14,39 @@ function clearBlink() {
 
 module.exports.light = function(status, speed) {
     clearBlink();
-    var sp = (speed == null)? 0 : speed;
+    var sp = speed? speed : 0;
     if(status === "on") {
-        if(!speed || !speedMap[speed]) {
-            blueLight.writeSync(1);    //LED ON
-            whiteLight.writeSync(1);            
+        if(sp == 0) {
+            blueLight.writeSync(1);
+            whiteLight.writeSync(1);
             return {status: "on", speed: sp};
         }
-        let interval = blink(speedMap[speed]);
-        return {status: "on", interval: interval, speed: sp};
+        if(speedMap[speed]) {
+            let interval = blink(speedMap[speed]);
+            return {status: "on", interval: interval, speed: sp};
+        }
     }        
     else {
         blueLight.writeSync(0);    //LED OFF
         whiteLight.writeSync(0);
         return {status: "off", speed: sp};
     }
-}
+};
+
+module.exports.changeSpeed = function(speed) {
+    var sp = speed? speed : 0;
+    if(status === "on") {
+        if(sp == 0) {
+            blueLight.writeSync(1);
+            whiteLight.writeSync(1);
+            return {status: "on", speed: sp};
+        }
+        if(speedMap[sp]) {
+            let interval = blink(speedMap[speed]);
+            return {status: "on", interval: interval, speed: sp};
+        }    
+    }
+};
 
 function blink(interval) {    
     logger.debug("Going to blink with interval " + interval);
