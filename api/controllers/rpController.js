@@ -33,7 +33,7 @@ module.exports.light = function(status, speed) {
     }
 };
 
-module.exports.changeSpeed = function(speed) {
+module.exports.changeSpeed = function(speed, status) {
     var sp = speed? speed : 0;
     if(status === "on") {
         if(sp == 0) {

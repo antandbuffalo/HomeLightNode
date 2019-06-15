@@ -22,7 +22,7 @@ exports.changeStatus = function(req, res) {
             nightMode.enable(isNightMode);
         }
         else if(speed != null) {
-            light.data = rp.changeSpeed(speed);
+            light.data = rp.changeSpeed(speed, light.data.status);
             res.json(light.data);
             logger.debug("in function speed end " + JSON.stringify(light.data));    
         }
