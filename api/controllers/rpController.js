@@ -16,9 +16,12 @@ module.exports.light = function(status, speed) {
     clearBlink();
     var sp = (speed == null)? 0 : speed;
     if(status === "on") {
-        blueLight.writeSync(1);    //LED ON
-        whiteLight.writeSync(1);        
-        let interval = changeSpeed(sp);
+        if(!speed || !speedMap[speed]) {
+            blueLight.writeSync(1);    //LED ON
+            whiteLight.writeSync(1);            
+            return {status: "on", speed: sp};
+        }
+        let interval = blink(speedMap[speed]);
         return {status: "on", interval: interval, speed: sp};
     }        
     else {
@@ -28,20 +31,11 @@ module.exports.light = function(status, speed) {
     }
 }
 
-function changeSpeed(speed) {    
-    if(!speed || !speedMap[speed]) {
-        blueLight.writeSync(1);    //LED ON
-        whiteLight.writeSync(1);
-        return null;
-    }
-    return blink(speedMap[speed]);
-}
-
 function blink(interval) {    
     logger.debug("Going to blink with interval " + interval);
-    blinkInterval = setInterval(function() {        
+    blinkInterval = setInterval(function() {     
         blueLight.writeSync(blueLight.readSync() ^ 1);
-        whiteLight.writeSync(whiteLight.readSync() ^ 1);
+        whiteLight.writeSync(blueLight.readSync() ^ 1);
     }, interval);
     return interval;
 }
