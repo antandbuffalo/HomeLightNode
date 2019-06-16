@@ -7,7 +7,7 @@ var httpCodes = require('./../constants');
 var lightModel = require("./../models/lightModel");
 
 module.exports.changeSpeed = function(req, res) {
-    let error = validation.checkValidSpeedReq();
+    let error = validation.checkValidSpeedReq(req.body);
     if(error) {
         logger.debug("changeSpeed error: " + JSON.stringify(light.data));
         res.status(error.code).json(error);

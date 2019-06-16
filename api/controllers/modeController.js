@@ -6,7 +6,7 @@ var lightModel = require("./../models/lightModel");
 var nightMC = require("./nightModeController");
 
 module.exports.changeMode = function(req, res) {
-    let error = validation.checkValidModeReq();
+    let error = validation.checkValidModeReq(req.body);
     if(error) {
         logger.debug("changeMode error: " + JSON.stringify(error));
         res.status(error.code).json(error);
