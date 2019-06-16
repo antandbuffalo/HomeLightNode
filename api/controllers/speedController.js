@@ -16,6 +16,6 @@ module.exports.changeSpeed = function(req, res) {
         let result = rp.changeSpeed(req.body.speed);
         lightModel.data.speed = result.speed;
         logger.debug("changeSpeed success: " + JSON.stringify(light.data));
-        res.status(httpCodes.SUCCESS).json(light.data);
+        res.status(httpCodes.SUCCESS.code).json(light.data);
     }
 }

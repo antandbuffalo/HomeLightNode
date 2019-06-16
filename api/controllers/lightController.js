@@ -22,7 +22,7 @@ exports.changeStatus = function(req, res) {
         let result = rp.light(req.body.status, lightModel.data.speed);
         lightModel.data.status = result.status;                
         logger.debug("in function changeStatus end " + JSON.stringify(lightModel.data));    
-        res.status(httpCodes.SUCCESS).json(lightModel.data);
+        res.status(httpCodes.SUCCESS.code).json(lightModel.data);
     }
 }
 
