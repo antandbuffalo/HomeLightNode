@@ -26,7 +26,7 @@ module.exports.checkValidModeReq = function(body) {
     if(!body || !body.mode) {
         return errorCodes.BAD_REQUEST;
     }
-    if(body.mode !== "night" || body.mode !== "default") {
+    if(body.mode !== "night" && body.mode !== "default") {
         return errorCodes.UNPROCESSABLE_ENTITY;
     }
     return null;
