@@ -68,6 +68,7 @@ module.exports.enable = function(flag) {
     }
     else {
         disableNightMode();
-        return {status: result.status, mode: "default"};
+        result = rpController.light(lightModel.data.status, lightModel.data.speed);
+        return {status: result.status, mode: "default", speed: result.speed};
     }
 }
