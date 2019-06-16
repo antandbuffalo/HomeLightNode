@@ -53,16 +53,21 @@ function disableNightMode() {
 module.exports.enable = function(flag) {
     let currentDate = new Date();
     if(flag) {
-        if(isNightHours(currentDate)) {
+        let result = null;
+        if(isNightHours(currentDate)) {            
+            result = rpController.light("on", lightModel.data.speed);
             logger.debug("In night hours " + JSON.stringify(lightModel.data));
-            rpController.light("on", lightModel.data.speed);
+        }
+        else {            
+            result = rpController.light("off", lightModel.data.speed);
+            logger.debug("In Day hours " + JSON.stringify(lightModel.data));
         }
         scheduleTime = ONE_SEC;
         startScheduler();
-        return {mode: "night"};
+        return {status: result.status, mode: "night"};
     }
     else {
         disableNightMode();
-        return {mode: "default"};
+        return {status: result.status, mode: "default"};
     }
 }
