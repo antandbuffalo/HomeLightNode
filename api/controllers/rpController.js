@@ -33,19 +33,25 @@ module.exports.light = function(status, speed) {
     }
 };
 
-module.exports.changeSpeed = function(speed, status) {
-    var sp = speed? speed : 0;
-    if(status === "on") {
-        if(sp == 0) {
+function isLightOn() {
+    return blueLight.readSync() || whiteLight.readSync();
+};
+
+module.exports.changeSpeed = function(speed) {
+    if(isLightOn()) {
+        clearBlink();
+        if(speed == 0) {
             blueLight.writeSync(1);
             whiteLight.writeSync(1);
-            return {status: "on", speed: sp};
+            return {status: "on", speed: speed};
         }
-        if(speedMap[sp]) {
-            clearBlink();
+        if(speedMap[speed]) {
             let interval = blink(speedMap[speed]);
-            return {status: "on", interval: interval, speed: sp};
+            return {status: "on", interval: interval, speed: speed};
         }    
+    }
+    else {
+        return {status: "off", speed: speed};
     }
 };
 

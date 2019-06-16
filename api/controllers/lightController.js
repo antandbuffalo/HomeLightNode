@@ -1,41 +1,34 @@
 "use strict";
 var rp = require("./rpController");
 var logger = require("../logger");
-var light = require("./../models/lightModel");
-var nightMode = require("./nightModeController");
+var lightModel = require("./../models/lightModel");
+var validation = require("./../services/validationService");
+var httpCodes = require("./../constants");
 
 logger.debug("Starting controller");
 exports.getStatus = function(req, res) {
-    logger.debug("in function getStatus start");
-    res.json(light.data);
-    logger.debug("in function getStatus end");
+    logger.debug("in function getStatus start " + JSON.stringify(lightModel.data));
+    res.json(lightModel.data);
 }
 
 exports.changeStatus = function(req, res) {
-    logger.debug("in function changeStatus start " + JSON.stringify(req.body));
-    if(req.body) {
-        var newStatus = req.body.status? req.body.status : "off";
-        var speed = req.body.speed? req.body.speed : null;
-        let isNightMode = req.body.isNightMode? req.body.isNightMode : null;
-
-        if(isNightMode !== null) {
-            nightMode.enable(isNightMode);
-        }
-        else if(speed != null) {
-            light.data = rp.changeSpeed(speed, light.data.status);
-            res.json(light.data);
-            logger.debug("in function speed end " + JSON.stringify(light.data));    
-        }
-        else {
-            light.data = rp.light(newStatus, speed);
-            res.json(light.data);
-            logger.debug("in function changeStatus end " + JSON.stringify(light.data));
-        }
+    logger.debug("in function changeStatus start " + JSON.stringify(req.body));    
+    let error = validation.checkValidLightReq(req.body);
+    if(error) {
+        logger.debug("in function changeStatus error " + JSON.stringify(error));    
+        res.status(error.code).json(error);
+    }
+    else {
+        let result = rp.light(req.body.status, lightModel.data.speed);
+        lightModel.data.status = result.status;                
+        logger.debug("in function changeStatus end " + JSON.stringify(lightModel.data));    
+        res.status(httpCodes.SUCCESS).json(lightModel.data);
     }
 }
 
 function start() {
-    light.data = rp.light("on");
+    logger.debug("Initial Start");
+    lightModel.data = rp.light("on");
 }
 start();
 

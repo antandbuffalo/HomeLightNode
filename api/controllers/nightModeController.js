@@ -1,5 +1,6 @@
 var rpController = require("./rpController");
-var lightStatus = require("./../models/lightModel"); 
+var lightModel = require("./../models/lightModel"); 
+var logger = require("../logger");
 let timer, ONE_SEC = 1000, scheduleTime, HALF_DAY = 12 * 60 * 60 * 1000;
 
 function isNightHours(currentDate) {
@@ -25,20 +26,22 @@ function startScheduler() {
                 disableNightMode();
                 scheduleTime = HALF_DAY;
                 if(isNightHours) {
-                    rpController.light("on", lightStatus.data.speed);
+                    logger.debug("In night hours Scheduler ON" + JSON.stringify(lightModel.data));
+                    rpController.light("on", lightModel.data.speed);
                 }
                 else {
-                    rpController.light("off", lightStatus.data.speed);
+                    logger.debug("In night hours Scheduler OFF" + JSON.stringify(lightModel.data));
+                    rpController.light("off", lightModel.data.speed);
                 }
                 startScheduler();
             }    
         }
         else {
             if(isNightHours) {
-                rpController.light("on", lightStatus.data.speed);
+                rpController.light("on", lightModel.data.speed);
             }
             else {
-                rpController.light("off", lightStatus.data.speed);
+                rpController.light("off", lightModel.data.speed);
             }
         }
     }, scheduleTime)
@@ -50,14 +53,15 @@ function disableNightMode() {
 module.exports.enable = function(flag) {
     if(flag) {
         if(isNightHours()) {
-            rpController.light("on", lightStatus.data.speed);
+            logger.debug("In night hours " + JSON.stringify(lightModel.data));
+            rpController.light("on", lightModel.data.speed);
         }
         scheduleTime = ONE_SEC;
         startScheduler();
-        lightStatus.data.isNightMode = true;
+        return {mode: "night"};
     }
     else {
         disableNightMode();
-        lightStatus.data.isNightMode = false;
+        return {mode: "default"};
     }
 }
