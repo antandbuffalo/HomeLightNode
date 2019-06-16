@@ -25,7 +25,7 @@ function startScheduler() {
             if(isExactNightHours(currentDate) && isZeroMin(currentDate) && isZeroSec(currentDate)) {            
                 disableNightMode();
                 scheduleTime = HALF_DAY;
-                if(isNightHours) {
+                if(isNightHours(currentDate)) {
                     logger.debug("In night hours Scheduler ON" + JSON.stringify(lightModel.data));
                     rpController.light("on", lightModel.data.speed);
                 }
@@ -37,7 +37,7 @@ function startScheduler() {
             }    
         }
         else {
-            if(isNightHours) {
+            if(isNightHours(currentDate)) {
                 rpController.light("on", lightModel.data.speed);
             }
             else {
@@ -51,8 +51,9 @@ function disableNightMode() {
     timer = null;    
 }
 module.exports.enable = function(flag) {
+    let currentDate = new Date();
     if(flag) {
-        if(isNightHours()) {
+        if(isNightHours(currentDate)) {
             logger.debug("In night hours " + JSON.stringify(lightModel.data));
             rpController.light("on", lightModel.data.speed);
         }
