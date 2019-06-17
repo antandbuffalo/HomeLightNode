@@ -6,7 +6,7 @@ let finishTime = 22, startTime = 18;
 let BIG_DURATION = ONE_HOUR;
 
 function isNightHours(currentDate) {
-    if(currentDate.getHours() > (startTime - 1) || currentDate.getHours() < finishTime) {
+    if(currentDate.getHours() > (startTime - 1) && currentDate.getHours() < finishTime) {
         return true;
     }
     return false;
