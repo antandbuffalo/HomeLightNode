@@ -1,7 +1,7 @@
 var errorCodes = require('./../constants');
 
 module.exports.checkValidSpeedReq = function(body) {
-    if(!body || !body.speed) {
+    if(!body || body.speed === null) {
         return errorCodes.BAD_REQUEST;
     }
     let speed = body.speed;
