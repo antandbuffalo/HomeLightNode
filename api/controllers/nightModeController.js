@@ -1,16 +1,18 @@
 var rpController = require("./rpController");
 var lightModel = require("./../models/lightModel"); 
 var logger = require("../logger");
-let timer, ONE_SEC = 1000, scheduleTime, HALF_DAY = 12 * 60 * 60 * 1000;
+let timer, ONE_SEC = 1000, scheduleTime, HALF_DAY = 12 * 60 * 60 * 1000, ONE_HOUR = 60 * 60 * 1000;
+let finishTime = 22, startTime = 18;
+let BIG_DURATION = ONE_HOUR;
 
 function isNightHours(currentDate) {
-    if(currentDate.getHours() > 17 || currentDate.getHours() < 6) {
+    if(currentDate.getHours() > (startTime - 1) || currentDate.getHours() < finishTime) {
         return true;
     }
     return false;
 };
 function isExactNightHours(currentDate) {
-    return currentDate.getHours() == 6 || currentDate.getHours() == 18;
+    return currentDate.getHours() == finishTime || currentDate.getHours() == startTime;
 };
 function isZeroMin(currentDate) {
     return currentDate.getMinutes() == 0;
@@ -21,10 +23,10 @@ function isZeroSec(currentDate) {
 function startScheduler() {
     timer = setInterval(function() {
         let currentDate = new Date();
-        if(scheduleTime != HALF_DAY) {
+        if(scheduleTime != BIG_DURATION) {
             if(isExactNightHours(currentDate) && isZeroMin(currentDate) && isZeroSec(currentDate)) {            
                 disableNightMode();
-                scheduleTime = HALF_DAY;
+                scheduleTime = BIG_DURATION;
                 if(isNightHours(currentDate)) {
                     logger.debug("In night hours Scheduler ON" + JSON.stringify(lightModel.data));
                     rpController.light("on", lightModel.data.speed);
