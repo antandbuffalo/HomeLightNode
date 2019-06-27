@@ -86,13 +86,9 @@ function changeDuration(onTime, offTime) {
     let result = enableMode(lightModel.data.mode);
     lightModel.data.mode = result.mode;
     return {
-        status: result.status,
         mode: result.mode,
-        speed: result.speed,
-        duration: {
-            onTime: lightModel.data.startTime,
-            offTime: lightModel.data.stopTime
-        }
+        startTime: lightModel.data.startTime,
+        endTime: lightModel.data.stopTime
     };
 }
 module.exports.enable = enableMode;
