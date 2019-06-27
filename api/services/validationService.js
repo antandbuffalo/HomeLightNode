@@ -31,3 +31,13 @@ module.exports.checkValidModeReq = function(body) {
     }
     return null;
 };
+
+module.exports.checkValidDurationRequest = function(body) {
+    if(!body || !body.duration || !body.duration.onTime || !body.duration.offTime) {
+        return errorCodes.BAD_REQUEST;
+    }
+    if(body.duration.onTime > 23 || body.duration.offTime > 23 || body.duration.onTime < 0 || body.duration.offTime < 0) {
+        return errorCodes.UNPROCESSABLE_ENTITY;
+    }
+    return null;
+};

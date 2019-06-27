@@ -1,18 +1,24 @@
 var rpController = require("./rpController");
-var lightModel = require("./../models/lightModel"); 
+var lightModel = require("./../models/lightModel");
 var logger = require("../logger");
 let timer, ONE_SEC = 1000, scheduleTime, HALF_DAY = 12 * 60 * 60 * 1000, ONE_HOUR = 60 * 60 * 1000;
-let finishTime = 22, startTime = 18;
 let BIG_DURATION = ONE_HOUR;
 
 function isNightHours(currentDate) {
-    if(currentDate.getHours() > (startTime - 1) && currentDate.getHours() < finishTime) {
-        return true;
+    if(lightModel.startTime < lightModel.stopTime) {
+        if(currentDate.getHours() > (lightModel.startTime - 1) && currentDate.getHours() < lightModel.stopTime) {
+            return true;
+        }
+    }
+    else {
+        if(currentDate.getHours() > (lightModel.startTime - 1) || currentDate.getHours() < lightModel.stopTime) {
+            return true;
+        }
     }
     return false;
 };
 function isExactNightHours(currentDate) {
-    return currentDate.getHours() == finishTime || currentDate.getHours() == startTime;
+    return currentDate.getHours() == lightModel.stopTime || currentDate.getHours() == lightModel.startTime;
 };
 function isZeroMin(currentDate) {
     return currentDate.getMinutes() == 0;
@@ -24,7 +30,7 @@ function startScheduler() {
     timer = setInterval(function() {
         let currentDate = new Date();
         if(scheduleTime != BIG_DURATION) {
-            if(isExactNightHours(currentDate) && isZeroMin(currentDate) && isZeroSec(currentDate)) {            
+            if(isExactNightHours(currentDate) && isZeroMin(currentDate) && isZeroSec(currentDate)) {
                 disableNightMode();
                 scheduleTime = BIG_DURATION;
                 if(isNightHours(currentDate)) {
@@ -36,7 +42,7 @@ function startScheduler() {
                     rpController.light("off", lightModel.data.speed);
                 }
                 startScheduler();
-            }    
+            }
         }
         else {
             if(isNightHours(currentDate)) {
@@ -50,23 +56,23 @@ function startScheduler() {
 };
 function disableNightMode() {
     clearInterval(timer);
-    timer = null;    
+    timer = null;
 }
-module.exports.enable = function(flag) {
+function enableMode(flag) {
     let currentDate = new Date();
     if(flag) {
         let result = null;
-        if(isNightHours(currentDate)) {            
+        if(isNightHours(currentDate)) {
             result = rpController.light("on", lightModel.data.speed);
             logger.debug("In night hours " + JSON.stringify(lightModel.data));
         }
-        else {            
+        else {
             result = rpController.light("off", lightModel.data.speed);
             logger.debug("In Day hours " + JSON.stringify(lightModel.data));
         }
         scheduleTime = ONE_SEC;
         startScheduler();
-        return {status: result.status, mode: "night"};
+        return {status: result.status, mode: "night", speed: result.speed};
     }
     else {
         disableNightMode();
@@ -74,3 +80,20 @@ module.exports.enable = function(flag) {
         return {status: result.status, mode: "default", speed: result.speed};
     }
 }
+function changeDuration(onTime, offTime) {
+    lightModel.data.startTime = onTime;
+    lightModel.data.stopTime = offTime;
+    let result = enableMode(lightModel.data.mode);
+    lightModel.data.mode = result.mode;
+    return {
+        status: result.status,
+        mode: result.mode,
+        speed: result.speed,
+        duration: {
+            onTime: lightModel.data.startTime,
+            offTime: lightModel.data.stopTime
+        }
+    };
+}
+module.exports.enable = enableMode;
+module.exports.changeDuration = changeDuration;

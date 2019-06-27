@@ -29,6 +29,8 @@ exports.changeStatus = function(req, res) {
 function start() {
     logger.debug("Initial Start");
     lightModel.data = rp.light("on");
+    lightModel.startTime = 18;
+    lightModel.stopTime = 22;
 }
 start();
 

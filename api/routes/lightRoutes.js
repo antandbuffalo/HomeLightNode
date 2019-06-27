@@ -12,4 +12,7 @@ module.exports = function(app) {
 
     app.route("/mode")        
         .post(modeCont.changeMode);  
+
+    app.route("/duration")        
+        .post(modeCont.changeDuration);
 }
