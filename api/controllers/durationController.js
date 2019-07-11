@@ -12,7 +12,7 @@ module.exports.changeDuration = function(req, res) {
         res.status(error.code).json(error);
     }
     else {
-        nightMC.changeDuration(req.body.duration.onTime, req.body.duration.offTime);
+        nightMC.changeDuration(req.body.startTime, req.body.stopTime);
         logger.debug("changeMode success: " + JSON.stringify(lightModel.data));
         res.status(httpCodes.SUCCESS.code).json(lightModel.data);
     }

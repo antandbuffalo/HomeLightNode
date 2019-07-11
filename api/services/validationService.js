@@ -33,10 +33,10 @@ module.exports.checkValidModeReq = function(body) {
 };
 
 module.exports.checkValidDurationRequest = function(body) {
-    if(!body || !body.startTime || !body.endTime) {
+    if(!body || !body.startTime || !body.stopTime) {
         return errorCodes.BAD_REQUEST;
     }
-    if(body.startTime > 23 || body.endTime > 23 || body.startTime < 0 || body.endTime < 0) {
+    if(body.startTime > 23 || body.stopTime > 23 || body.startTime < 0 || body.stopTime < 0) {
         return errorCodes.UNPROCESSABLE_ENTITY;
     }
     return null;
