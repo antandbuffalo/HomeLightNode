@@ -12,7 +12,7 @@ module.exports.changeMode = function(req, res) {
         res.status(error.code).json(error);
     }
     else {
-        let result = nightMC.enable((req.body.mode === "night"));        
+        let result = nightMC.enable((req.body.mode === "night"));
         lightModel.data.mode = result.mode;
         logger.debug("changeMode success: " + JSON.stringify(lightModel.data));
         res.status(httpCodes.SUCCESS.code).json(lightModel.data);

@@ -1,18 +1,19 @@
 "use strict";
 module.exports = function(app) {
-    var homeLight = require("../controllers/lightController");
-    var speedCont = require("../controllers/speedController");
-    var modeCont = require("./../controllers/modeController");
+    var lightController = require("../controllers/lightController");
+    var speedController = require("../controllers/speedController");
+    var modeController = require("./../controllers/modeController");
+    var durationController = require("./../controllers/durationController");
     app.route("/light")
-        .get(homeLight.getStatus)
-        .post(homeLight.changeStatus);
+        .get(lightController.getStatus)
+        .post(lightController.changeStatus);
 
-    app.route("/speed")        
-        .post(speedCont.changeSpeed);
+    app.route("/speed")
+        .post(speedController.changeSpeed);
 
-    app.route("/mode")        
-        .post(modeCont.changeMode);  
+    app.route("/mode")
+        .post(modeController.changeMode);
 
-    app.route("/duration")        
-        .post(modeCont.changeDuration);
+    app.route("/duration")
+        .post(durationController.changeDuration);
 }
