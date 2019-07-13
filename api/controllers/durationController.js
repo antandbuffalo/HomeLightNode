@@ -6,6 +6,7 @@ var lightModel = require("../models/lightModel");
 var nightMC = require("./nightModeController");
 
 module.exports.changeDuration = function(req, res) {
+    logger.debug("changeDuration req: " + JSON.stringify(req.body));
     let error = validation.checkValidDurationRequest(req.body);
     if(error) {
         logger.debug("changeDuration error: " + JSON.stringify(error));
