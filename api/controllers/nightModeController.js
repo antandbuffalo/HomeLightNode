@@ -6,7 +6,7 @@ let BIG_DURATION = ONE_HOUR;
 
 function isNightHours(currentDate) {
     if(lightModel.startTime < lightModel.stopTime) {
-        if(currentDate.getHours() > (lightModel.startTime - 1) && currentDate.getHours() < lightModel.stopTime) {
+        if((currentDate.getHours() > (lightModel.startTime - 1)) && (currentDate.getHours() < lightModel.stopTime)) {
             return true;
         }
     }
@@ -70,6 +70,7 @@ function enableMode(flag) {
         }
         else {
             result = rpController.light("off", lightModel.data.speed);
+            lightModel.data.status = result.status;
             logger.debug("In Day hours " + JSON.stringify(lightModel.data));
         }
         scheduleTime = ONE_SEC;
