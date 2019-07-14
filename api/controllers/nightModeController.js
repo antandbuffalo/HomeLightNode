@@ -5,7 +5,6 @@ let timer, ONE_SEC = 1000, scheduleTime, HALF_DAY = 12 * 60 * 60 * 1000, ONE_HOU
 let BIG_DURATION = ONE_HOUR;
 
 function isNightHours(currentDate) {
-    logger.debug("isNightHours " + );
     if(lightModel.data.startTime < lightModel.data.stopTime) {
         if((currentDate.getHours() > (lightModel.data.startTime - 1)) && (currentDate.getHours() < lightModel.data.stopTime)) {
             return true;
