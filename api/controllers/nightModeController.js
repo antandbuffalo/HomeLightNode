@@ -55,8 +55,10 @@ function startScheduler() {
     }, scheduleTime)
 };
 function disableNightMode() {
-    clearInterval(timer);
-    timer = null;
+    if(timer) {
+        clearInterval(timer);
+        timer = null;
+    }
 }
 function enableMode(flag) {
     let currentDate = new Date();
@@ -83,12 +85,12 @@ function enableMode(flag) {
 function changeDuration(onTime, offTime) {
     lightModel.data.startTime = onTime;
     lightModel.data.stopTime = offTime;
-    let result = enableMode(lightModel.data.mode);
+    let result = enableMode(lightModel.data.mode == "night"? true : false);
     lightModel.data.mode = result.mode;
     return {
         mode: result.mode,
         startTime: lightModel.data.startTime,
-        endTime: lightModel.data.stopTime
+        stopTime: lightModel.data.stopTime
     };
 }
 module.exports.enable = enableMode;
