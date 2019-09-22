@@ -2,7 +2,8 @@ var rpController = require("./rpController");
 var lightModel = require("./../models/lightModel");
 var logger = require("../logger");
 let timer, ONE_SEC = 1000, scheduleTime, HALF_DAY = 12 * 60 * 60 * 1000, ONE_HOUR = 60 * 60 * 1000;
-let BIG_DURATION = ONE_HOUR;
+const ONE_MIN = ONE_SEC * 60;
+let BIG_DURATION = ONE_MIN;
 
 function isNightHours(currentDate) {
     if(lightModel.data.startTime < lightModel.data.stopTime) {
@@ -30,7 +31,7 @@ function startScheduler() {
     timer = setInterval(function() {
         let currentDate = new Date();
         if(scheduleTime != BIG_DURATION) {
-            if(isExactNightHours(currentDate) && isZeroMin(currentDate) && isZeroSec(currentDate)) {
+            if(isExactNightHours(currentDate) && isZeroMin(currentDate)) {
                 disableNightMode();
                 scheduleTime = BIG_DURATION;
                 if(isNightHours(currentDate)) {
